@@ -1,9 +1,10 @@
+import HeroSection from "@/components/HeroSection";
 
 export default function Home() {
   return (
     <>
-      <div className="min-h-screen h-[1600px]">
-        <h1 className="text-3xl text-center">Hello Next</h1>
+      <div className="min-h-screen bg-black/[0.96] antialiased bg-grid-white/[0.02]">
+        <HeroSection/>
       </div>
     </>
   );
