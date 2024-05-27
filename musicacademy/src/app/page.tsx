@@ -2,7 +2,9 @@
 export default function Home() {
   return (
     <>
-      <h1 className="text-3xl font-semibold text-center">Hello Next</h1>
+      <div className="min-h-screen h-[1600px]">
+        <h1 className="text-3xl text-center">Hello Next</h1>
+      </div>
     </>
   );
 }
