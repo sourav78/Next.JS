@@ -2,13 +2,14 @@ import { dbConnect } from "@/db/dbConfig";
 import UserModel from "@/model/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcryptjs'
+import { sendEmail } from "@/helper/mailer";
 
 dbConnect()
 
 export async function POST(req: NextRequest){
     try {
         
-        const reqBody = req.json()
+        const reqBody = await req.json()
         const {username, email, password} = reqBody
 
         const user = await UserModel.findOne({email})
@@ -32,8 +33,18 @@ export async function POST(req: NextRequest){
 
         const savedUser = await newUser.save()
 
+        //Send email to user
+
+        await sendEmail({email, emailType: "VERIFY", userId: savedUser._id})
+
+        return NextResponse.json({
+            success: true,
+            message: "User registered successfully."
+        })
+
     } catch (error: any) {
         return NextResponse.json({
+            success: false,
             error: error.message
         }, {
             status: 500
