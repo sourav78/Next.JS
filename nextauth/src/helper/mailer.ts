@@ -31,12 +31,12 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
       })
     }
 
-    const verifyEmail = `<p>Click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "Verify your email" : "Reset your password"} or copy paste the link in your browser. 
-            <br> ${process.env.DOMAIN}/verifyemail?token=${hashedToken}
+    const verifyEmail = `<p>Click <a href="${process.env.DOMAIN}/auth/verifyemail?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "Verify your email" : "Reset your password"} or copy paste the link in your browser. 
+            <br> ${process.env.DOMAIN}/auth/verifyemail?token=${hashedToken}
             </p>`
 
-    const resetPassword = `<p>Click <a href="${process.env.DOMAIN}/resetpassword?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "Verify your email" : "Reset your password"} or copy paste the link in your browser. 
-            <br> ${process.env.DOMAIN}/resetpassword?token=${hashedToken}
+    const resetPassword = `<p>Click <a href="${process.env.DOMAIN}/auth/resetpassword?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "Verify your email" : "Reset your password"} or copy paste the link in your browser. 
+            <br> ${process.env.DOMAIN}/auth/resetpassword?token=${hashedToken}
             </p>`
 
     const transporter = nodemailer.createTransport({
