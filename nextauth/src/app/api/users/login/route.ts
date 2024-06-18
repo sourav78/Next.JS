@@ -34,6 +34,15 @@ export async function POST(request: NextRequest){
             })
         }
 
+        if(!user.isVerified){
+            return NextResponse.json({
+                success: false,
+                error: "Email is not verified. Verify first"
+            }, {
+                status: 400
+            })
+        }
+
         const tokenData = {
             id: user._id,
             username: user.username,
