@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitGubProvider from "next-auth/providers/github";
 import CredentialProvider from "next-auth/providers/credentials";
 import { UserModel } from "./model/user.model";
+import bcrypt from 'bcryptjs'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -28,7 +29,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       },
       authorize: async (credentials) => {
-        
+
         const email = credentials.email as string | undefined
         const password = credentials.password as string | undefined
 
@@ -36,19 +37,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new CredentialsSignin("All fields are required.")
         }
 
-        const user = await UserModel.findOne({email}).select("+password")
+        const user = await UserModel.findOne({ email }).select("+password")
 
-        if(!user){
-          throw new CredentialsSignin("Invalid email/password")
-        }
-        
-        if(!user.password){
+        if (!user) {
           throw new CredentialsSignin("Invalid email/password")
         }
 
-        if (password !== "passcode")
+        if (!user.password) {
+          throw new CredentialsSignin("Invalid email/password")
+        }
+
+        const isPasswordMatch = bcrypt.compare(password, user.password)
+
+        if (!isPasswordMatch)
           throw new CredentialsSignin("Please Provide valid Password")
-        else return user
+
+        user.password = undefined
+
+        return user
 
       }
     })
