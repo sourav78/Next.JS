@@ -5,6 +5,7 @@ import GitGubProvider from "next-auth/providers/github";
 import CredentialProvider from "next-auth/providers/credentials";
 import { UserModel } from "./model/user.model";
 import bcrypt from 'bcryptjs'
+import { connectDB } from "./lib/db";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -37,6 +38,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new CredentialsSignin("All fields are required.")
         }
 
+        //Database connection
+        await connectDB()
+
         const user = await UserModel.findOne({ email }).select("+password")
 
         if (!user) {
@@ -59,4 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
     })
   ],
+  pages: {
+    signIn: "/login"
+  }
 })

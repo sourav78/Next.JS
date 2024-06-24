@@ -12,8 +12,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import {Github, Chrome} from "lucide-react"
+import { signIn } from "@/auth";
+import { CredentialsSignin } from "next-auth";
 
 const Login = () => {
+
+  const onLogin = async(formData:FormData) => {
+    "use server"
+
+    const email = formData.get("email") as string | undefined;
+    const password = formData.get("password") as string | undefined;
+
+    if(!email || !password){
+      throw new Error("Please provide all fields.")
+    }
+
+    try {
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: true,
+        redirectTo: "/"
+      })
+    } catch (error) {
+      const err = error as CredentialsSignin
+      return err.message
+    }
+  }
+
   return (
     <>
       <div className="w-full h-dvh flex justify-center items-center">
@@ -23,15 +49,15 @@ const Login = () => {
             <CardDescription>Login to access the page</CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
+            <form action={onLogin}>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" placeholder="xyz@email.com" />
+                  <Input id="email" placeholder="xyz@email.com" name="email" />
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="password">Password</Label>
-                  <Input id="password" placeholder="xyz@email.com" />
+                  <Input id="password" placeholder="xyz@email.com" name="password"/>
                 </div>
                 <Button type="submit">Login</Button>
               </div>
