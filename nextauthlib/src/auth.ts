@@ -65,5 +65,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: "/login"
+  },
+  callbacks: {
+    signIn: async ({user, account, profile, email}) => {
+      // console.log(user);
+      // console.log(account);
+      // console.log(profile);
+      // console.log(email);
+
+      if (account?.provider === "google") {
+        try {
+          
+          const {email, name, id} = user
+
+          await connectDB()
+
+          const registerUser = await UserModel.findOne({email})
+
+          if(!registerUser){
+            await UserModel.create({email, name, googleId: id})
+          }
+
+          return true
+        } catch (error) {
+          throw new Error("Error while creating user.")
+        }
+      }
+      
+      return false
+    }
   }
 })

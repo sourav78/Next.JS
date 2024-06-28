@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,10 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import {Github, Chrome} from "lucide-react"
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { CredentialsSignin } from "next-auth";
+import { redirect } from "next/navigation";
 
-const Login = () => {
+const Login = async () => {
+
+  const session = await auth();
+  if(session?.user) redirect("/")
 
   const onLogin = async(formData:FormData) => {
     "use server"
@@ -34,6 +39,7 @@ const Login = () => {
         redirect: true,
         redirectTo: "/"
       })
+      redirect("/")
     } catch (error) {
       const err = error as CredentialsSignin
       return err.message
@@ -68,12 +74,20 @@ const Login = () => {
           <CardFooter className="flex-col">
             <CardContent className="w-full flex justify-evenly">
               
-              <Button variant="outline">
-                <Github className="h-4 w-4 mr-1"/>
-                Github</Button>
-              <Button variant="outline">
-                <Chrome className="h-4 w-4 mr-1"/>
-                Google</Button>
+              <form action="">
+                <Button variant="outline">
+                  <Github className="h-4 w-4 mr-1"/>
+                  Github</Button>
+              </form>
+              <form action={async () => {
+                "use server"
+
+                await signIn("google")
+              }}>
+                <Button variant="outline">
+                  <Chrome className="h-4 w-4 mr-1"/>
+                  Google</Button>
+              </form>
             </CardContent>
             <Link className="text-sm" href={"/signup"}>Dont have an account? signup</Link>
           </CardFooter>

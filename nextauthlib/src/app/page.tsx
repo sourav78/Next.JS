@@ -1,10 +1,13 @@
+"user client"
 import { auth } from "@/auth";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
 
   const session = await auth()
   const user = session?.user
+  if(!user) redirect("/login")
 
   // console.table(user)
 
