@@ -74,7 +74,11 @@ const Login = async () => {
           <CardFooter className="flex-col">
             <CardContent className="w-full flex justify-evenly">
               
-              <form action="">
+              <form action={async () => {
+                "use server"
+
+                await signIn("github")
+              }}>
                 <Button variant="outline">
                   <Github className="h-4 w-4 mr-1"/>
                   Github</Button>

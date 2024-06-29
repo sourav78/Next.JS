@@ -67,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login"
   },
   callbacks: {
-    signIn: async ({user, account, profile, email}) => {
+    signIn: async ({ user, account, profile, email }) => {
       // console.log(user);
       // console.log(account);
       // console.log(profile);
@@ -75,15 +75,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (account?.provider === "google") {
         try {
-          
-          const {email, name, id} = user
+
+          const { email, name, id } = user
 
           await connectDB()
 
-          const registerUser = await UserModel.findOne({email})
+          const registerUser = await UserModel.findOne({ email })
 
-          if(!registerUser){
-            await UserModel.create({email, name, googleId: id})
+          if (!registerUser) {
+            await UserModel.create({ email, name, googleId: id })
           }
 
           return true
@@ -91,7 +91,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error("Error while creating user.")
         }
       }
-      
+
+      if (account?.provider === "github") {
+        console.log(user);
+
+        try {
+          const { email, name, id } = user
+
+          await connectDB()
+
+          const registerUser = await UserModel.findOne({ email })
+
+          if (!registerUser) {
+            await UserModel.create({ email, name, googleId: id })
+          }
+
+          return true
+        } catch (error) {
+          throw new Error("Error while creating user.")
+        }
+      }
+
       return false
     }
   }
