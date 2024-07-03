@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
 
     if(publicPath && token){
         return NextResponse.redirect(new URL('/auth/profile', request.url))
-    }
+     }
     
     if(!publicPath && !token){
         return NextResponse.redirect(new URL('/auth/login', request.url))
