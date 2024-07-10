@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useDebounceValue, useDebounceCallback } from "usehooks-ts";
+import { useDebounceCallback } from "usehooks-ts";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { SignupSchema } from "@/schema/signUpSchema";
@@ -13,7 +13,6 @@ import { ApiResponse } from "@/types/ApiResponse";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -75,7 +74,7 @@ const Signup = () => {
 
   const onSubmit = async (data: z.infer<typeof SignupSchema>) => {
     console.log("Click");
-    
+
     setIsSubmitting(false);
     try {
       const response = await axios.post<ApiResponse>("/api/signup", data);
@@ -135,9 +134,9 @@ const Signup = () => {
                   {!isCheckingUsername && usernameMessage && (
                     <p
                       className={`text-sm ${
-                        usernameMessage === 'Username is unique.'
-                          ? 'text-green-500'
-                          : 'text-red-500'
+                        usernameMessage === "Username is unique."
+                          ? "text-green-500"
+                          : "text-red-500"
                       }`}
                     >
                       {usernameMessage}
@@ -173,17 +172,17 @@ const Signup = () => {
                 </FormItem>
               )}
             />
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "Sign Up"
+              )}
+            </Button>
           </form>
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </>
-            ) : (
-              "Sign Up"
-            )}
-          </Button>
         </Form>
       </div>
     </div>
