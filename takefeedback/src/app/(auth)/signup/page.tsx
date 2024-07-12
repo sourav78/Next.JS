@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 const Signup = () => {
   const { toast } = useToast();
@@ -184,6 +185,14 @@ const Signup = () => {
             </Button>
           </form>
         </Form>
+        <div className="text-center mt-4">
+          <p>
+            Already registred?{" "}
+            <Link href="/signin" className="text-blue-600 hover:text-blue-800">
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
