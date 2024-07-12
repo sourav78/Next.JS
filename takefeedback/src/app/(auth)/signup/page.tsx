@@ -126,7 +126,7 @@ const Signup = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        setUsername(e.target.value);
+                        debouncedUsername(e.target.value);
                       }}
                     />
                   </FormControl>
