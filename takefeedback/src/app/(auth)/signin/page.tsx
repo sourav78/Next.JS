@@ -42,11 +42,19 @@ const Signin = () => {
     })
 
     if(result?.error){
-      toast({
-        title: "Login failed",
-        description: "Incorrect email and password",
-        variant: "destructive"
-      })
+      if (result.error === 'CredentialsSignin') {
+        toast({
+          title: 'Login Failed',
+          description: 'Incorrect username or password',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error,
+          variant: 'destructive',
+        });
+      }
     }
 
     if(result?.url){
