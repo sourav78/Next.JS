@@ -32,7 +32,7 @@ export async function GET(request: Request){
             {$group: {_id: '$_id', messages: {$push: '$message'}}}
         ])
 
-        console.log(user[0]);
+        // console.log(user[0]);
 
         if(!user || user.length === 0){
             return Response.json({
